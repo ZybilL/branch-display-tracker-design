@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add Entry — Product Display Update</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="page">
+  <div class="card" id="formCard">
+    <a class="back-link" href="index.html">← Change branch</a>
+
+    <div id="formView">
+      <div class="form-header">
+        <div class="form-title">Add Entry</div>
+      </div>
+
+      <div id="errorBanner"></div>
+
+      <form id="entryForm" class="form-fields">
+        <div class="field">
+          <label>Branch</label>
+          <div class="readonly-value" id="branchDisplay">—</div>
+        </div>
+
+        <div class="field">
+          <label>Display Location <span class="required">*</span></label>
+          <input type="text" id="location" placeholder="e.g. Front window, Shelf 3" required>
+        </div>
+
+        <div class="field">
+          <label>Existing Item (being replaced)</label>
+          <div class="split-row">
+            <input type="text" class="code-input" id="existingItemCode" placeholder="Code">
+            <input type="text" class="name-input" id="existingItemName" placeholder="Product name">
+          </div>
+          <div class="hint">Leave blank if this is a new placement rather than a swap.</div>
+        </div>
+
+        <div class="field">
+          <label>New Item to Replace With <span class="required">*</span></label>
+          <div class="split-row">
+            <input type="text" class="code-input" id="itemCode" placeholder="Code" required>
+            <input type="text" class="name-input" id="itemName" placeholder="Product name" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Photo</label>
+          <div class="photo-drop" id="photoDrop">
+            <input type="file" id="photoInput" accept="image/*" capture="environment">
+            <span class="photo-drop-label" id="photoLabel">Tap to add display photo</span>
+          </div>
+          <div class="hint" id="photoHint"></div>
+        </div>
+
+        <div class="field">
+          <label>Notes</label>
+          <textarea id="notes" placeholder="Anything else the schematic team should know"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitBtn">Add Entry</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="successView" style="display:none;" class="center-text">
+      <div class="success-icon">✓</div>
+      <div class="title" style="font-size:20px;">Entry submitted</div>
+      <div class="subtitle">Thanks — this has been logged for <span id="successBranch"></span>.</div>
+      <div class="form-actions">
+        <button type="button" class="btn" id="addAnotherBtn">Add another entry</button>
+        <a class="btn btn-primary" style="text-decoration:none;display:flex;align-items:center;justify-content:center;" href="index.html">Change branch</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script src="submit.js"></script>
+</body>
+</html>

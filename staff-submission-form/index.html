@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product Display Update</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="page">
+  <div class="card">
+    <div class="title">Product Display Update</div>
+    <div class="subtitle">
+      Please photograph your branch's current product display and note any items that need to be replaced.
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-badge">1</div>
+        <div class="step-text">Take a clear photo of the display (window, shelf, or counter).</div>
+      </div>
+      <div class="step">
+        <div class="step-badge">2</div>
+        <div class="step-text">Note the item that needs to be replaced, and where it is.</div>
+      </div>
+      <div class="step">
+        <div class="step-badge">3</div>
+        <div class="step-text">Submit it in the tracker — takes less than a minute.</div>
+      </div>
+    </div>
+
+    <div class="section-label">Select your branch</div>
+    <div class="branch-grid" id="branchGrid"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+  var grid = document.getElementById('branchGrid');
+  BRANCHES.forEach(function (code) {
+    var a = document.createElement('a');
+    a.className = 'branch-btn';
+    a.href = 'submit.html?branch=' + encodeURIComponent(code);
+    a.textContent = code;
+    grid.appendChild(a);
+  });
+</script>
+</body>
+</html>
