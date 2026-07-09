@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Branch Product Display Tracker — Design Handoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #0F766E;
+    --bg: #F6F7F9;
+    --text: #1F2430;
+    --text-secondary: #6B7280;
+    --border: #E5E7EB;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 56px 32px 32px;
+  }
+  .eyebrow {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 0 12px;
+  }
+  header p {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 720px;
+    margin: 0 0 6px;
+  }
+  .notice {
+    max-width: 1080px;
+    margin: 0 auto 40px;
+    padding: 0 32px;
+  }
+  .notice-box {
+    background: #FEF6E7;
+    border: 1px solid #F3DDA6;
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #7A5A0B;
+  }
+  main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 32px 64px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+    gap: 28px;
+  }
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .card img {
+    width: 100%;
+    display: block;
+    border-bottom: 1px solid var(--border);
+    cursor: zoom-in;
+  }
+  .card-body {
+    padding: 18px 20px 22px;
+  }
+  .card-number {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+  .card-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+  .card-desc {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+  footer {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 32px 56px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  footer a { color: var(--accent); }
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,17,20,0.85);
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    z-index: 100;
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Design Handoff</div>
+  <h1>Branch Product Display Tracker</h1>
+  <p>An internal tool for a 14-branch retail chain. Branch staff photograph their current in-store product display and log which item needs to be replaced with which new item. A designer reviews and approves/rejects each submission, and approved/rejected jobs are compiled into a report for the schematic (visual merchandising) team.</p>
+  <p>This gallery shows the six screens as rendered reference images.</p>
+</header>
+
+<div class="notice">
+  <div class="notice-box">
+    These are static reference screenshots, not interactive pages. The original design files (<code>.dc.html</code>) were built in a prototyping tool and require that tool's runtime to render — they aren't included here. See the handoff <code>README.md</code> in the source repo for the full spec, data model, and design tokens.
+  </div>
+</div>
+
+<main id="gallery"></main>
+
+<footer>
+  Source design files, data model, and full spec are documented in <code>README.md</code> alongside this bundle.
+</footer>
+
+<div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt=""></div>
+
+<script>
+  const screens = [
+    {
+      file: "01-landing-page.png",
+      title: "1. Landing Page",
+      desc: "Entry point shared with branch staff. Explains the 3-step task and lets staff pick their branch from a grid of 14 branch buttons."
+    },
+    {
+      file: "02-product-list.png",
+      title: "2. Product List",
+      desc: "Main tracker — branch staff/admin view and add entries for one branch at a time, with status filters, search, and an Add Entry modal."
+    },
+    {
+      file: "03-product-detail.png",
+      title: "3. Product Detail",
+      desc: "Read-only detail view of a single entry: photo, location, existing/new item info, progress bar, and a remark field for the schematic team."
+    },
+    {
+      file: "04-design-approval.png",
+      title: "4. Design Approval",
+      desc: "A designer reviews every submission and marks it Approved or Rejected using a stage-then-submit (batch confirm) pattern."
+    },
+    {
+      file: "05-branch-summary.png",
+      title: "5. Branch Summary",
+      desc: "A mini executive dashboard across all 14 branches — stat strip, status breakdown, entries by month/year, and entries by branch."
+    },
+    {
+      file: "06-display-report.png",
+      title: "6. Display Report",
+      desc: "A printable/exportable report of all open jobs grouped by branch, for the schematic team, with CSV export."
+    }
+  ];
+
+  const gallery = document.getElementById('gallery');
+  screens.forEach((s, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <img src="${s.file}" alt="${s.title}" loading="lazy">
+      <div class="card-body">
+        <div class="card-title">${s.title}</div>
+        <p class="card-desc">${s.desc}</p>
+      </div>
+    `;
+    gallery.appendChild(card);
+  });
+
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  document.addEventListener('click', (e) => {
+    if (e.target.tagName === 'IMG' && e.target.closest('.card')) {
+      lightboxImg.src = e.target.src;
+      lightbox.classList.add('open');
+    } else if (e.target === lightbox) {
+      lightbox.classList.remove('open');
+    }
+  });
+</script>
+
+</body>
+</html>
