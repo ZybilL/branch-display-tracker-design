@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; }
+    a { color: {{ accentColor }}; }
+    a:hover { color: {{ accentColorHover }}; }
+  </style>
+</helmet>
+
+<div style="min-height:100vh;background:oklch(98% 0.004 250);color:oklch(22% 0.02 250);display:flex;align-items:center;justify-content:center;padding:32px;">
+  
+<div style="max-width:640px;width:100%;background:white;border:1px solid oklch(91% 0.01 250);border-radius:18px;padding:40px 36px;">
+
+    
+    <div style="font-size:26px;font-weight:800;letter-spacing:-0.01em;line-height:1.25;margin-bottom:8px;">Product Display Update</div>
+    <div style="font-size:15px;color:oklch(45% 0.02 250);line-height:1.55;margin-bottom:24px;">
+      Please photograph your branch's current product display and note any items that need to be replaced.
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px;">
+      <div style="display:flex;gap:14px;align-items:flex-start;">
+        <div style="width:26px;height:26px;border-radius:50%;background:{{ accentSoftBg }};color:{{ accentColor }};font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+        <div style="font-size:14.5px;line-height:1.5;padding-top:2px;">Take a clear photo of the display (window, shelf, or counter).</div>
+      </div>
+      <div style="display:flex;gap:14px;align-items:flex-start;">
+        <div style="width:26px;height:26px;border-radius:50%;background:{{ accentSoftBg }};color:{{ accentColor }};font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+        <div style="font-size:14.5px;line-height:1.5;padding-top:2px;">Note the item that needs to be replaced, and where it is.</div>
+      </div>
+      <div style="display:flex;gap:14px;align-items:flex-start;">
+        <div style="width:26px;height:26px;border-radius:50%;background:{{ accentSoftBg }};color:{{ accentColor }};font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+        <div style="font-size:14.5px;line-height:1.5;padding-top:2px;">Submit it in the tracker — takes less than a minute.</div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;color:oklch(35% 0.02 250);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px;">Select your branch</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));gap:10px;">
+      <sc-for list="{{ branches }}" as="b" hint-placeholder-count="14">
+        <a href="{{ b.listHref }}" style="display:block;text-align:center;padding:14px 8px;border-radius:11px;border:1.5px solid oklch(88% 0.01 250);background:oklch(98% 0.005 250);font-size:14px;font-weight:700;text-decoration:none;color:oklch(25% 0.02 250);" style-hover="border-color:{{ accentColor }};background:{{ accentSoftBg }};color:{{ accentColor }};">
+          {{ b.name }}
+        </a>
+      </sc-for>
+    </div>
+  </div></div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 900, &quot;height&quot;: 760},
+  &quot;accentColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#0F766E&quot;, &quot;options&quot;: [&quot;#0F766E&quot;, &quot;#2456C9&quot;, &quot;#4338CA&quot;, &quot;#0E7490&quot;], &quot;tsType&quot;: &quot;string&quot;}
+}">
+class Component extends DCLogic {
+  static BRANCHES = ['BTRD','BTB','BTK','BTP','BTRP','BTR','BTN','BTY','BTH','BTRY','BTKR','BTCM','BTSR','BTUD'];
+
+  renderVals() {
+    const accentColor = this.props.accentColor ?? '#0F766E';
+    return {
+      accentColor,
+      accentColorHover: accentColor,
+      accentSoftBg: 'color-mix(in oklch, ' + accentColor + ' 14%, white)',
+      branches: Component.BRANCHES.map(name => ({
+        name,
+        listHref: './' + encodeURIComponent('Product List.dc.html') + '?branch=' + encodeURIComponent(name)
+      }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

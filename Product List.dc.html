@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; }
+    input, select, button { font-family: inherit; }
+    ::placeholder { color: oklch(60% 0.01 250); }
+  </style>
+</helmet>
+<x-import component-from-global-scope="image-slot" from="./image-slot.js" hint-size="1,1" style="width:1px;height:1px;overflow:hidden;position:absolute;opacity:0;pointer-events:none;"></x-import>
+
+<div style="min-height:100vh;background:oklch(97% 0.004 250);color:oklch(22% 0.02 250);display:flex;">
+
+  <!-- Sidebar -->
+  <div style="width:230px;flex-shrink:0;background:white;border-right:1px solid oklch(90% 0.01 250);display:flex;flex-direction:column;padding:18px 14px;">
+    <div style="display:flex;align-items:center;gap:9px;padding:4px 8px 18px;">
+      <div style="width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,#0F766E,#2456C9);flex-shrink:0;"></div>
+      <span style="font-size:16px;font-weight:800;letter-spacing:-0.01em;">Product Display</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:18px;">
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:oklch(35% 0.02 250);font-size:13.5px;font-weight:600;">
+        <span>▤</span> All Items
+      </div>
+      <a href="Design Approval.dc.html" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;border-radius:8px;color:oklch(35% 0.02 250);font-size:13.5px;font-weight:600;text-decoration:none;">
+        <span style="display:flex;align-items:center;gap:10px;">✓ Design Approval</span>
+      </a>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;border-radius:8px;color:oklch(35% 0.02 250);font-size:13.5px;font-weight:600;">
+        <span style="display:flex;align-items:center;gap:10px;">⏱ Pending Action</span>
+        <span style="background:#0F766E;color:white;font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 7px;">{{ totalPending }}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:oklch(35% 0.02 250);font-size:13.5px;font-weight:600;">
+        <span>☰</span> My Items
+      </div>
+    </div>
+
+    <div style="font-size:10.5px;font-weight:700;color:oklch(55% 0.02 250);text-transform:uppercase;letter-spacing:0.05em;padding:0 10px 8px;">Branches</div>
+    <div style="display:flex;flex-direction:column;gap:1px;margin-bottom:18px;max-height:220px;overflow:auto;">
+      <sc-for list="{{ branchNav }}" as="bn" hint-placeholder-count="14">
+        <div onClick="{{ bn.onClick }}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:7px;font-size:13px;background:{{ bn.bg }};color:{{ bn.fg }};font-weight:{{ bn.weight }};cursor:pointer;">
+          <span>{{ bn.name }}</span>
+          <span style="font-size:11px;color:oklch(55% 0.02 250);">{{ bn.count }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    
+
+    <div style="font-size:10.5px;font-weight:700;color:oklch(55% 0.02 250);text-transform:uppercase;letter-spacing:0.05em;padding:0 10px 8px;">Reports</div>
+    <div style="display:flex;flex-direction:column;gap:1px;">
+      <a href="Branch Summary.dc.html" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;font-size:13px;color:oklch(35% 0.02 250);text-decoration:none;">📊 Summary</a>
+      <a href="Display Report.dc.html" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;font-size:13px;color:oklch(35% 0.02 250);text-decoration:none;">🖨 Job Report</a>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
+    <!-- Top bar -->
+    <div style="height:60px;flex-shrink:0;background:white;border-bottom:1px solid oklch(90% 0.01 250);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px;">
+      <a href="Landing Page.dc.html" style="font-size:13px;font-weight:600;color:oklch(45% 0.02 250);text-decoration:none;display:flex;align-items:center;gap:6px;flex-shrink:0;">← Branches</a>
+      <div style="position:relative;width:320px;">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:oklch(55% 0.02 250);font-size:14px;">🔎</span>
+        <input type="text" placeholder="Search item, location…" value="{{ searchQuery }}" onChange="{{ onSearchChange }}" style="width:100%;padding:9px 12px 9px 34px;border-radius:9px;border:1px solid oklch(88% 0.01 250);font-size:13.5px;background:oklch(97% 0.005 250);">
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span style="font-size:16px;">🔔</span>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;">
+          <div style="width:30px;height:30px;border-radius:50%;background:oklch(90% 0.01 250);"></div>
+          Admin
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:22px 24px;flex:1;overflow:auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;row-gap:10px;">
+        <div style="font-size:17px;font-weight:800;">{{ pageTitle }} <span style="font-weight:500;color:oklch(45% 0.02 250);font-size:13px;">— {{ totalEntries }} total</span></div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;row-gap:10px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;row-gap:6px;">
+            <sc-for list="{{ statusFilters }}" as="sf" hint-placeholder-count="4">
+              <button onClick="{{ sf.onClick }}" style="padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid {{ sf.border }};cursor:pointer;background:{{ sf.bg }};color:{{ sf.fg }};white-space:nowrap;">{{ sf.label }} <span style="opacity:0.65;">{{ sf.count }}</span></button>
+            </sc-for>
+          </div>
+          <select value="{{ monthFilter }}" onChange="{{ onMonthChange }}" style="padding:7px 12px;border-radius:9px;border:1px solid oklch(88% 0.01 250);font-size:12.5px;font-weight:600;background:white;color:oklch(35% 0.02 250);">
+            <sc-for list="{{ monthOptions }}" as="mo" hint-placeholder-count="4">
+              <option value="{{ mo.value }}">{{ mo.label }}</option>
+            </sc-for>
+          </select>
+          <select value="{{ yearFilter }}" onChange="{{ onYearChange }}" style="padding:7px 12px;border-radius:9px;border:1px solid oklch(88% 0.01 250);font-size:12.5px;font-weight:600;background:white;color:oklch(35% 0.02 250);">
+            <sc-for list="{{ yearOptions }}" as="yo" hint-placeholder-count="3">
+              <option value="{{ yo.value }}">{{ yo.label }}</option>
+            </sc-for>
+          </select>
+          <button onClick="{{ openAdd }}" style="padding:9px 16px;border-radius:9px;border:none;background:#0F766E;color:white;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">+ Add Entry</button>
+        </div>
+      </div>
+
+      <div style="background:white;border:1px solid oklch(90% 0.01 250);border-radius:12px;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="border-bottom:1px solid oklch(90% 0.01 250);">
+              <th style="text-align:left;padding:11px 16px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;width:96px;">Photo</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;">Location</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;width:10%;">Existing Code</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;">Existing<br>Product Name</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;width:10%;">New<br>Code</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;">New<br>Product Name</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;">Status</th>
+              <th style="text-align:left;padding:11px 16px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;width:160px;">Progress</th>
+              <th style="width:44px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ pageRows }}" as="row" hint-placeholder-count="10">
+              <tr onClick="{{ row.onView }}" style="border-bottom:1px solid oklch(94% 0.005 250);cursor:pointer;" style-hover="background:oklch(97% 0.006 250);">
+                <td style="padding:8px 16px;">
+                  <div style="width:64px;height:64px;border-radius:8px;overflow:hidden;">
+                    <image-slot id="{{ row.photoId }}" shape="rect" placeholder="Photo" fit="cover" style="width:100%;height:100%;"></image-slot>
+                  </div>
+                </td>
+                <td style="padding:10px 12px;font-size:13px;color:oklch(40% 0.02 250);">{{ row.location }}</td>
+                <td style="padding:10px 12px;font-size:12px;color:oklch(50% 0.02 250);font-family:monospace;">{{ row.existingItemCodeDisplay }}</td>
+                <td style="padding:10px 12px;font-size:12.5px;color:oklch(45% 0.02 250);">{{ row.existingItemNameDisplay }}</td>
+                <td style="padding:10px 12px;font-size:12px;color:oklch(45% 0.02 250);font-family:monospace;">{{ row.itemCodeDisplay }}</td>
+                <td style="padding:10px 12px;font-size:13px;font-weight:600;">{{ row.itemName }}</td>
+                <td style="padding:10px 12px;">
+                  <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:{{ row.statusBg }};color:{{ row.statusFg }};white-space:nowrap;">{{ row.statusLabel }}</span>
+                </td>
+                <td style="padding:10px 16px;">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div style="flex:1;height:7px;border-radius:999px;background:oklch(93% 0.005 250);overflow:hidden;">
+                      <div style="height:100%;border-radius:999px;width:{{ row.progressPct }}%;background:{{ row.progressColor }};"></div>
+                    </div>
+                    <span style="font-size:11.5px;font-weight:700;color:oklch(40% 0.02 250);width:30px;text-align:right;">{{ row.progressPct }}%</span>
+                  </div>
+                </td>
+                <td style="padding:10px 16px;text-align:center;" onClick="{{ stopRowClick }}">
+                  <button onClick="{{ row.onDelete }}" title="Delete" style="border:none;background:transparent;cursor:pointer;font-size:15px;color:oklch(55% 0.02 250);padding:4px;">🗑</button>
+                </td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid oklch(92% 0.005 250);">
+          <span style="font-size:12.5px;color:oklch(45% 0.02 250);">{{ pageLabel }}</span>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button onClick="{{ prevPage }}" style="width:28px;height:28px;border-radius:7px;border:1px solid oklch(88% 0.01 250);background:white;cursor:pointer;font-size:12px;">‹</button>
+            <sc-for list="{{ pageNumbers }}" as="pn" hint-placeholder-count="3">
+              <button onClick="{{ pn.onClick }}" style="width:28px;height:28px;border-radius:7px;border:1px solid {{ pn.border }};background:{{ pn.bg }};color:{{ pn.fg }};cursor:pointer;font-size:12.5px;font-weight:600;">{{ pn.label }}</button>
+            </sc-for>
+            <button onClick="{{ nextPage }}" style="width:28px;height:28px;border-radius:7px;border:1px solid oklch(88% 0.01 250);background:white;cursor:pointer;font-size:12px;">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Entry Modal -->
+  <sc-if value="{{ modalOpen }}">
+    <div style="position:fixed;inset:0;background:oklch(20% 0.02 250 / 0.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;" onClick="{{ closeModal }}">
+      <div style="background:white;border-radius:16px;max-width:480px;width:100%;max-height:90vh;overflow:auto;padding:24px;" onClick="{{ stopPropagation }}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+          <div style="font-size:18px;font-weight:800;">Add Entry</div>
+          <button onClick="{{ closeModal }}" style="border:none;background:oklch(94% 0.005 250);width:30px;height:30px;border-radius:8px;font-size:16px;cursor:pointer;color:oklch(40% 0.02 250);">×</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:oklch(40% 0.02 250);display:block;margin-bottom:5px;">Branch</label>
+            <div style="padding:10px 12px;border-radius:9px;background:oklch(96% 0.006 250);font-size:14px;font-weight:700;">{{ formBranch }}</div>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:oklch(40% 0.02 250);display:block;margin-bottom:5px;">Display Location</label>
+            <input type="text" placeholder="e.g. Front window, Shelf 3" value="{{ formLocation }}" onChange="{{ onFormLocationChange }}" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid oklch(85% 0.01 250);font-size:14px;">
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:oklch(40% 0.02 250);display:block;margin-bottom:5px;">Existing Item (being replaced)</label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" placeholder="Code" value="{{ formExistingItemCode }}" onChange="{{ onFormExistingItemCodeChange }}" style="width:35%;padding:10px 12px;border-radius:9px;border:1px solid oklch(85% 0.01 250);font-size:14px;">
+              <input type="text" placeholder="Product name" value="{{ formExistingItemName }}" onChange="{{ onFormExistingItemNameChange }}" style="flex:1;padding:10px 12px;border-radius:9px;border:1px solid oklch(85% 0.01 250);font-size:14px;">
+            </div>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:oklch(40% 0.02 250);display:block;margin-bottom:5px;">New Item to Replace With</label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" placeholder="Code" value="{{ formItemCode }}" onChange="{{ onFormItemCodeChange }}" style="width:35%;padding:10px 12px;border-radius:9px;border:1px solid oklch(85% 0.01 250);font-size:14px;">
+              <input type="text" placeholder="Product name" value="{{ formItemName }}" onChange="{{ onFormItemNameChange }}" style="flex:1;padding:10px 12px;border-radius:9px;border:1px solid oklch(85% 0.01 250);font-size:14px;">
+            </div>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:oklch(40% 0.02 250);display:block;margin-bottom:5px;">Photo</label>
+            <div style="width:100%;height:160px;">
+              <image-slot id="{{ formPhotoId }}" shape="rounded" radius="10" placeholder="Drop display photo" fit="cover" style="width:100%;height:100%;"></image-slot>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:6px;">
+            <button onClick="{{ closeModal }}" style="flex:1;padding:11px;border-radius:9px;border:1px solid oklch(85% 0.01 250);background:white;font-size:14px;font-weight:600;cursor:pointer;">Cancel</button>
+            <button onClick="{{ saveEntry }}" style="flex:1;padding:11px;border-radius:9px;border:none;background:#0F766E;color:white;font-size:14px;font-weight:700;cursor:pointer;">Add Entry</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  static BRANCHES = ['BTRD','BTB','BTK','BTP','BTRP','BTR','BTN','BTY','BTH','BTRY','BTKR','BTCM','BTSR','BTUD'];
+
+  static STATUS_META = {
+    pending:     { label: 'Pending',     bg: 'oklch(93% 0.04 230)', fg: 'oklch(45% 0.15 230)', progress: 20,  color: 'oklch(58% 0.19 25)' },
+    in_progress: { label: 'In Progress', bg: 'oklch(92% 0.05 250)', fg: 'oklch(40% 0.13 250)', progress: 60,  color: 'oklch(75% 0.16 90)' },
+    done:        { label: 'Done',        bg: 'oklch(92% 0.06 150)', fg: 'oklch(38% 0.1 150)',  progress: 100, color: 'oklch(70% 0.15 150)' }
+  };
+
+  static MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  static sampleSeed() {
+    const s = (branch, location, itemCode, itemName, status, date, existingItemName, existingItemCode) => ({ branch, location, itemCode, itemName, status, date, existingItemName: existingItemName || '', existingItemCode: existingItemCode || '' });
+    return [
+      s('BTRD', 'Front window', 'DSP-101', 'Summer promo poster', 'pending', '2026-06-02', 'Spring promo poster', 'DSP-088'),
+      s('BTRD', 'Checkout counter', 'DSP-102', 'Loyalty card display', 'in_progress', '2026-05-14'),
+      s('BTB', 'Shelf 3, aisle 2', 'DSP-103', 'New snack packaging', 'pending', '2026-06-20', 'Old snack packaging', 'DSP-071'),
+      s('BTK', 'Entrance table', 'DSP-104', 'Seasonal bundle sign', 'done', '2025-12-05'),
+      s('BTP', 'Front window', 'DSP-105', 'Holiday banner', 'pending', '2025-12-18'),
+      s('BTRP', 'Shelf 1', 'DSP-106', 'Price tag set', 'in_progress', '2026-04-09'),
+      s('BTR', 'Checkout counter', 'DSP-107', 'Impulse item rack card', 'done', '2026-01-22'),
+      s('BTN', 'Front window', 'DSP-108', 'New collection poster', 'pending', '2026-06-11', 'Faded collection poster', 'DSP-060'),
+      s('BTY', 'Shelf 2, aisle 1', 'DSP-109', 'Product info card', 'pending', '2026-05-30'),
+      s('BTH', 'Entrance table', 'DSP-110', 'Welcome sign', 'in_progress', '2026-03-15'),
+      s('BTRY', 'Front window', 'DSP-111', 'Discount sticker set', 'done', '2026-02-08'),
+      s('BTKR', 'Checkout counter', 'DSP-112', 'New payment method sign', 'pending', '2026-07-01', 'Old payment sign', 'DSP-050'),
+      s('BTCM', 'Shelf 4', 'DSP-113', 'Refill stock label', 'in_progress', '2026-04-25'),
+      s('BTSR', 'Front window', 'DSP-114', 'Brand refresh poster', 'pending', '2026-06-27'),
+      s('BTUD', 'Entrance table', 'DSP-115', 'New arrivals sign', 'done', '2025-11-19')
+    ].map((e, i) => ({ id: 'e' + (i + 1), photoId: 'photo-e' + (i + 1), ...e }));
+  }
+
+  state = {
+    entries: Component.sampleSeed(),
+    activeBranch: null,
+    searchQuery: '',
+    statusFilter: 'all',
+    monthFilter: 'all',
+    yearFilter: 'all',
+    page: 1,
+    rowsPerPage: 10,
+    nextId: Component.sampleSeed().length + 1,
+    modalOpen: false,
+    formBranch: Component.BRANCHES[0],
+    formLocation: '',
+    formExistingItemCode: '',
+    formExistingItemName: '',
+    formItemCode: '',
+    formItemName: '',
+    formPhotoId: ''
+  };
+
+  componentDidMount() {
+    const params = new URLSearchParams(window.location.search);
+    const b = params.get('branch');
+    if (b && Component.BRANCHES.includes(b)) {
+      this.setState({ activeBranch: b, formBranch: b });
+    }
+  }
+
+  openAdd() {
+    this.setState(s => ({
+      modalOpen: true,
+      formBranch: s.activeBranch || Component.BRANCHES[0],
+      formLocation: '',
+      formExistingItemCode: '',
+      formExistingItemName: '',
+      formItemCode: '',
+      formItemName: '',
+      formPhotoId: 'photo-new-' + Date.now()
+    }));
+  }
+
+  closeModal() {
+    this.setState({ modalOpen: false });
+  }
+
+  deleteEntry(id) {
+    this.setState(s => ({ entries: s.entries.filter(e => e.id !== id) }));
+  }
+
+  saveEntry() {
+    this.setState(s => {
+      if (!s.formLocation.trim() && !s.formItemName.trim()) return { modalOpen: false };
+      const id = 'e' + s.nextId;
+      return {
+        modalOpen: false,
+        nextId: s.nextId + 1,
+        entries: [...s.entries, {
+          id, photoId: s.formPhotoId, branch: s.formBranch, location: s.formLocation,
+          existingItemCode: s.formExistingItemCode, existingItemName: s.formExistingItemName,
+          itemCode: s.formItemCode, itemName: s.formItemName, status: 'pending',
+          date: new Date().toISOString().slice(0, 10)
+        }]
+      };
+    });
+  }
+
+  renderVals() {
+    const activeBranch = this.state.activeBranch || Component.BRANCHES[0];
+    const branchEntries = this.state.entries.filter(e => e.branch === activeBranch);
+    const q = this.state.searchQuery.trim().toLowerCase();
+    const matches = (e) => {
+      if (this.state.statusFilter !== 'all' && e.status !== this.state.statusFilter) return false;
+      if (this.state.monthFilter !== 'all' && (e.date || '').slice(5, 7) !== this.state.monthFilter) return false;
+      if (this.state.yearFilter !== 'all' && (e.date || '').slice(0, 4) !== this.state.yearFilter) return false;
+      if (!q) return true;
+      return (e.location + ' ' + e.itemName).toLowerCase().includes(q);
+    };
+    const filtered = branchEntries.filter(matches);
+
+    const monthKeys = [...new Set(this.state.entries.map(e => (e.date || '').slice(5, 7)).filter(Boolean))].sort();
+    const monthOptions = [
+      { value: 'all', label: 'All Months' },
+      ...monthKeys.map(m => ({ value: m, label: Component.MONTH_NAMES[parseInt(m, 10) - 1] }))
+    ];
+    const yearKeys = [...new Set(this.state.entries.map(e => (e.date || '').slice(0, 4)).filter(Boolean))].sort().reverse();
+    const yearOptions = [
+      { value: 'all', label: 'All Years' },
+      ...yearKeys.map(y => ({ value: y, label: y }))
+    ];
+
+    const totalEntries = branchEntries.length;
+    const totalPending = branchEntries.filter(e => e.status === 'pending').length;
+    const totalInProgress = branchEntries.filter(e => e.status === 'in_progress').length;
+    const totalDone = branchEntries.filter(e => e.status === 'done').length;
+
+    const statusDefs = [
+      { value: 'all', label: 'All', count: totalEntries },
+      { value: 'pending', label: 'Pending', count: totalPending },
+      { value: 'in_progress', label: 'In Progress', count: totalInProgress },
+      { value: 'done', label: 'Done', count: totalDone }
+    ];
+    const statusFilters = statusDefs.map(sd => {
+      const active = this.state.statusFilter === sd.value;
+      return {
+        ...sd,
+        onClick: () => this.setState({ statusFilter: sd.value, page: 1 }),
+        bg: active ? '#0F766E' : 'white',
+        fg: active ? 'white' : 'oklch(35% 0.02 250)',
+        border: active ? '#0F766E' : 'oklch(88% 0.01 250)'
+      };
+    });
+
+    const branchNav = Component.BRANCHES.map(name => {
+      const active = name === activeBranch;
+      return {
+        name,
+        count: this.state.entries.filter(e => e.branch === name).length,
+        bg: active ? 'oklch(94% 0.03 165)' : 'transparent',
+        fg: active ? '#0F766E' : 'oklch(35% 0.02 250)',
+        weight: active ? '700' : '500',
+        onClick: () => {
+          this.setState({ activeBranch: name, page: 1, statusFilter: 'all', searchQuery: '' });
+          const url = new URL(window.location.href);
+          url.searchParams.set('branch', name);
+          window.history.replaceState({}, '', url);
+        }
+      };
+    });
+
+    const rowsPerPage = this.state.rowsPerPage;
+    const totalPages = Math.max(1, Math.ceil(filtered.length / rowsPerPage));
+    const page = Math.min(this.state.page, totalPages);
+    const start = (page - 1) * rowsPerPage;
+    const pageEntries = filtered.slice(start, start + rowsPerPage);
+
+    const pageRows = pageEntries.map(e => {
+      const meta = Component.STATUS_META[e.status];
+      return {
+        ...e,
+        itemDisplay: e.itemCode ? (e.itemCode + ' — ' + e.itemName) : e.itemName,
+        itemCodeDisplay: e.itemCode || '—',
+        existingItemCodeDisplay: e.existingItemCode || '—',
+        existingItemNameDisplay: e.existingItemName || '—',
+        statusLabel: meta.label,
+        statusBg: meta.bg,
+        statusFg: meta.fg,
+        progressPct: meta.progress,
+        progressColor: meta.color,
+        onView: () => { window.location.href = 'Product Detail.dc.html?entry=' + e.id + '&branch=' + activeBranch; },
+        onDelete: () => this.deleteEntry(e.id)
+      };
+    });
+
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1).map(n => ({
+      label: String(n),
+      onClick: () => this.setState({ page: n }),
+      bg: n === page ? '#0F766E' : 'white',
+      fg: n === page ? 'white' : 'oklch(35% 0.02 250)',
+      border: n === page ? '#0F766E' : 'oklch(88% 0.01 250)'
+    }));
+
+    const pageLabel = filtered.length === 0
+      ? 'No items'
+      : ('Showing ' + (start + 1) + '–' + Math.min(start + rowsPerPage, filtered.length) + ' of ' + filtered.length);
+
+    return {
+      pageTitle: activeBranch,
+      searchQuery: this.state.searchQuery,
+      onSearchChange: (ev) => this.setState({ searchQuery: ev.target.value, page: 1 }),
+      totalEntries,
+      totalPending,
+      statusFilters,
+      monthOptions,
+      monthFilter: this.state.monthFilter,
+      onMonthChange: (ev) => this.setState({ monthFilter: ev.target.value, page: 1 }),
+      yearOptions,
+      yearFilter: this.state.yearFilter,
+      onYearChange: (ev) => this.setState({ yearFilter: ev.target.value, page: 1 }),
+      branchNav,
+      pageRows,
+      pageNumbers,
+      pageLabel,
+      modalOpen: this.state.modalOpen,
+      openAdd: () => this.openAdd(),
+      closeModal: () => this.closeModal(),
+      stopPropagation: (ev) => ev.stopPropagation(),
+      saveEntry: () => this.saveEntry(),
+      branchOptions: Component.BRANCHES,
+      formBranch: this.state.formBranch,
+      onFormBranchChange: (ev) => this.setState({ formBranch: ev.target.value }),
+      formLocation: this.state.formLocation,
+      onFormLocationChange: (ev) => this.setState({ formLocation: ev.target.value }),
+      formExistingItemCode: this.state.formExistingItemCode,
+      onFormExistingItemCodeChange: (ev) => this.setState({ formExistingItemCode: ev.target.value }),
+      formExistingItemName: this.state.formExistingItemName,
+      onFormExistingItemNameChange: (ev) => this.setState({ formExistingItemName: ev.target.value }),
+      formItemCode: this.state.formItemCode,
+      onFormItemCodeChange: (ev) => this.setState({ formItemCode: ev.target.value }),
+      formItemName: this.state.formItemName,
+      onFormItemNameChange: (ev) => this.setState({ formItemName: ev.target.value }),
+      formPhotoId: this.state.formPhotoId,
+      stopRowClick: (ev) => ev.stopPropagation(),
+      prevPage: () => this.setState(s => ({ page: Math.max(1, s.page - 1) })),
+      nextPage: () => this.setState(s => ({ page: Math.min(totalPages, s.page + 1) }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

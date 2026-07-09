@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>doc-page:not(:defined){visibility:hidden}</style>
+  <style>doc-page:not([size]){display:none!important}</style>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid oklch(88% 0.01 250); vertical-align: top; }
+    th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; color: oklch(45% 0.02 250); background: oklch(96% 0.008 250); }
+    tr { break-inside: avoid; }
+    @media print { .no-print { display: none !important; } }
+  </style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" hint-size="1,1" style="width:1px;height:1px;overflow:hidden;position:absolute;opacity:0;pointer-events:none;"></x-import>
+
+<div style="min-height:100vh;display:flex;">
+
+  <!-- Sidebar -->
+  <div class="no-print" style="width:230px;flex-shrink:0;background:white;border-right:1px solid oklch(90% 0.01 250);display:flex;flex-direction:column;padding:18px 14px;">
+    <div style="display:flex;align-items:center;gap:9px;padding:4px 8px 18px;">
+      <div style="width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,#0F766E,#2456C9);flex-shrink:0;"></div>
+      <span style="font-size:16px;font-weight:800;letter-spacing:-0.01em;">Product Display</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:18px;">
+      <a href="Product List.dc.html" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:oklch(35% 0.02 250);font-size:13.5px;font-weight:600;text-decoration:none;">
+        <span>▤</span> All Items
+      </a>
+      <a href="Design Approval.dc.html" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:oklch(35% 0.02 250);font-size:13.5px;font-weight:600;text-decoration:none;">
+        <span>✓</span> Design Approval
+      </a>
+    </div>
+
+    <div style="font-size:10.5px;font-weight:700;color:oklch(55% 0.02 250);text-transform:uppercase;letter-spacing:0.05em;padding:0 10px 8px;">Reports</div>
+    <div style="display:flex;flex-direction:column;gap:1px;">
+      <a href="Branch Summary.dc.html" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;font-size:13px;color:oklch(35% 0.02 250);text-decoration:none;">📊 Summary</a>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:7px;font-size:13px;background:oklch(94% 0.03 165);color:#0F766E;font-weight:700;">🖨 Job Report</div>
+    </div>
+
+    <div style="margin-top:auto;padding-top:18px;">
+      <a href="Landing Page.dc.html" style="font-size:12.5px;font-weight:600;color:oklch(45% 0.02 250);text-decoration:none;display:flex;align-items:center;gap:6px;">← Branches</a>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div style="flex:1;min-width:0;">
+
+  <div class="no-print" style="background:white;border-bottom:1px solid oklch(90% 0.01 250);">
+    <div style="max-width:8.5in;margin:0 auto;padding:16px 0.75in;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <div style="font-size:15px;font-weight:800;letter-spacing:-0.01em;">Job Report</div>
+      <button onClick="{{ exportCsv }}" style="padding:9px 16px;border-radius:9px;border:1px solid oklch(85% 0.01 250);background:white;font-size:13px;font-weight:600;cursor:pointer;color:oklch(30% 0.02 250);display:flex;align-items:center;gap:6px;">
+        ⬇ Export to CSV
+      </button>
+    </div>
+  </div>
+
+<doc-page size="letter" margin="0.75in">
+
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;border-bottom:2px solid oklch(22% 0.02 250);padding-bottom:14px;margin-bottom:18px;">
+    <div>
+      <h1 style="font-size:22px;font-weight:800;margin:0 0 4px;letter-spacing:-0.01em;">Product Display Update — Job Report</h1>
+      <div style="font-size:13px;color:oklch(45% 0.02 250);">Prepared for: Schematic Team</div>
+    </div>
+    <div style="text-align:right;font-size:12.5px;color:oklch(45% 0.02 250);white-space:nowrap;">{{ reportDate }}</div>
+  </div>
+
+  <p style="font-size:14px;line-height:1.6;margin:0 0 18px;">
+    {{ jobCount }} open display-update jobs across {{ branchCount }} branches, collected from branch photo submissions. Each row lists the item currently in place and the item it should be replaced with. Please schedule and confirm completion back to the merchandising team.
+  </p>
+
+  <sc-for list="{{ branchGroups }}" as="bg" hint-placeholder-count="8">
+    <h2 style="font-size:15px;font-weight:700;margin:20px 0 6px;">{{ bg.name }} <span style="font-weight:500;color:oklch(45% 0.02 250);font-size:12.5px;">— {{ bg.countLabel }}</span></h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:14%;">Location</th>
+          <th style="width:9%;">Existing Code</th>
+          <th style="width:17%;">Existing Item</th>
+          <th style="width:9%;">New Code</th>
+          <th style="width:17%;">New Item</th>
+          <th style="width:10%;">Status</th>
+          <th style="width:9%;">Approval</th>
+          <th style="width:15%;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <sc-for list="{{ bg.jobs }}" as="job" hint-placeholder-count="2">
+          <tr>
+            <td>{{ job.location }}</td>
+            <td style="font-family:monospace;color:oklch(50% 0.02 250);">{{ job.existingItemCodeDisplay }}</td>
+            <td>{{ job.existingItemDisplay }}</td>
+            <td style="font-family:monospace;color:oklch(45% 0.02 250);">{{ job.itemCodeDisplay }}</td>
+            <td style="font-weight:600;">{{ job.item }}</td>
+            <td>{{ job.statusLabel }}</td>
+            <td>{{ job.approvalLabel }}</td>
+            <td>{{ job.notesDisplay }}</td>
+          </tr>
+        </sc-for>
+      </tbody>
+    </table>
+  </sc-for>
+
+</doc-page>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  static STATUS_LABELS = { pending: 'Pending', in_progress: 'In Progress', done: 'Done' };
+  static APPROVAL_LABELS = { needs_review: 'Needs Review', approved: 'Approved', rejected: 'Rejected' };
+  static STORAGE_KEY = 'productDisplayApprovals';
+
+  static readSubmittedApprovals() {
+    try {
+      const raw = localStorage.getItem(Component.STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (err) { return {}; }
+  }
+
+  static sampleSeed() {
+    const s = (branch, location, existingItemCode, existingItem, itemCode, item, status, notes, approval) => ({ branch, location, existingItemCode, existingItem, itemCode, item, status, notes, approval: approval || 'needs_review' });
+    return [
+      s('BTRD', 'Front window', 'DSP-088', 'Spring promo poster', 'DSP-101', 'Summer promo poster', 'pending', 'Old poster faded, needs reprint', 'needs_review'),
+      s('BTRD', 'Checkout counter', '', '', 'DSP-102', 'Loyalty card display', 'in_progress', '', 'approved'),
+      s('BTB', 'Shelf 3, aisle 2', 'DSP-071', 'Old snack packaging', 'DSP-103', 'New snack packaging', 'pending', 'Supplier switched box size', 'needs_review'),
+      s('BTP', 'Front window', '', '', 'DSP-105', 'Holiday banner', 'pending', '', 'needs_review'),
+      s('BTRP', 'Shelf 1', 'DSP-090', 'Old price tags', 'DSP-106', 'Price tag set', 'in_progress', 'Waiting on new price list', 'rejected'),
+      s('BTN', 'Front window', 'DSP-060', 'Faded collection poster', 'DSP-108', 'New collection poster', 'pending', 'Glass has old tape residue', 'needs_review'),
+      s('BTY', 'Shelf 2, aisle 1', '', '', 'DSP-109', 'Product info card', 'pending', '', 'needs_review'),
+      s('BTH', 'Entrance table', '', '', 'DSP-110', 'Welcome sign', 'in_progress', '', 'approved'),
+      s('BTKR', 'Checkout counter', 'DSP-050', 'Old payment sign', 'DSP-112', 'New payment method sign', 'pending', 'Needs QR code updated', 'needs_review'),
+      s('BTCM', 'Shelf 4', '', '', 'DSP-113', 'Refill stock label', 'in_progress', '', 'rejected'),
+      s('BTSR', 'Front window', '', '', 'DSP-114', 'Brand refresh poster', 'pending', '', 'needs_review')
+    ];
+  }
+
+  exportCsv() {
+    const submittedApproval = Component.readSubmittedApprovals();
+    const jobs = Component.sampleSeed().map(j => {
+      const key = j.branch + '|' + j.itemCode;
+      return submittedApproval[key] ? { ...j, approval: submittedApproval[key] } : j;
+    });
+    const headers = ['Branch', 'Location', 'Existing Code', 'Existing Item', 'New Code', 'New Item', 'Status', 'Approval', 'Notes'];
+    const escapeCell = (val) => {
+      const str = String(val ?? '');
+      return /[",\n]/.test(str) ? '"' + str.replace(/"/g, '""') + '"' : str;
+    };
+    const rows = jobs.map(j => [
+      j.branch, j.location, j.existingItemCode || '', j.existingItem || '', j.itemCode || '', j.item,
+      Component.STATUS_LABELS[j.status], Component.APPROVAL_LABELS[j.approval], j.notes || ''
+    ]);
+    const csv = [headers, ...rows].map(r => r.map(escapeCell).join(',')).join('\r\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'display-job-report.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  renderVals() {
+    const submittedApproval = Component.readSubmittedApprovals();
+    const jobs = Component.sampleSeed().map(j => {
+      const key = j.branch + '|' + j.itemCode;
+      return submittedApproval[key] ? { ...j, approval: submittedApproval[key] } : j;
+    });
+    const branchNames = [...new Set(jobs.map(j => j.branch))];
+    const branchGroups = branchNames.map(name => {
+      const branchJobs = jobs.filter(j => j.branch === name).map(j => ({
+        ...j,
+        statusLabel: Component.STATUS_LABELS[j.status],
+        approvalLabel: Component.APPROVAL_LABELS[j.approval],
+        existingItemCodeDisplay: j.existingItemCode || '—',
+        existingItemDisplay: j.existingItem || '—',
+        itemCodeDisplay: j.itemCode || '—',
+        notesDisplay: j.notes || '—'
+      }));
+      return {
+        name,
+        jobs: branchJobs,
+        countLabel: branchJobs.length + (branchJobs.length === 1 ? ' job' : ' jobs')
+      };
+    });
+
+    const today = new Date();
+    const reportDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    return {
+      reportDate,
+      jobCount: jobs.length,
+      branchCount: branchNames.length,
+      branchGroups,
+      exportCsv: () => this.exportCsv()
+    };
+  }
+}
+
+</script>
+</body>
+</html>

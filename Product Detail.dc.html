@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; }
+    a { color: {{ accentColor }}; text-decoration: none; }
+    a:hover { color: {{ accentColorHover }}; }
+  </style>
+</helmet>
+<x-import component-from-global-scope="image-slot" from="./image-slot.js" hint-size="1,1" style="width:1px;height:1px;overflow:hidden;position:absolute;opacity:0;pointer-events:none;"></x-import>
+
+<div style="min-height:100vh;background:oklch(97% 0.004 250);color:oklch(22% 0.02 250);">
+
+  <!-- Header -->
+  <div style="background:white;border-bottom:1px solid oklch(90% 0.01 250);">
+    <div style="max-width:900px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;gap:12px;">
+      <a href="{{ backHref }}" style="font-size:13.5px;font-weight:600;color:oklch(45% 0.02 250);display:flex;align-items:center;gap:6px;">← Back to {{ activeBranch }}</a>
+    </div>
+  </div>
+
+  <sc-if value="{{ notFound }}">
+    <div style="max-width:900px;margin:60px auto;text-align:center;color:oklch(50% 0.02 250);font-size:14px;">
+      Item not found. <a href="{{ backHref }}">Go back</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ found }}">
+  <div style="max-width:900px;margin:0 auto;padding:24px;display:grid;grid-template-columns:340px 1fr;gap:28px;">
+
+    <!-- Photo -->
+    <div>
+      <div style="width:100%;aspect-ratio:1;border-radius:14px;overflow:hidden;border:1px solid oklch(90% 0.01 250);">
+        <image-slot id="{{ entry.photoId }}" shape="rect" placeholder="Display photo" fit="cover" style="width:100%;height:100%;"></image-slot>
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <span style="font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;background:{{ entry.statusBg }};color:{{ entry.statusFg }};">{{ entry.statusLabel }}</span>
+          <span style="font-size:12.5px;color:oklch(50% 0.02 250);font-weight:600;">Branch {{ entry.branch }}</span>
+        </div>
+        <div style="font-size:22px;font-weight:800;letter-spacing:-0.01em;">{{ entry.location }}</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="background:white;border:1px solid oklch(90% 0.01 250);border-radius:12px;padding:16px;">
+          <div style="font-size:11px;font-weight:700;color:oklch(50% 0.02 250);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Location</div>
+          <div style="font-size:15px;font-weight:700;">{{ entry.location }}</div>
+        </div>
+        <div style="background:white;border:1px solid oklch(90% 0.01 250);border-radius:12px;padding:16px;">
+          <div style="font-size:11px;font-weight:700;color:oklch(50% 0.02 250);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Notes</div>
+          <sc-if value="{{ entry.hasNotes }}">
+            <div style="font-size:13.5px;line-height:1.5;color:oklch(35% 0.02 250);">{{ entry.notes }}</div>
+          </sc-if>
+          <sc-if value="{{ entry.noNotes }}">
+            <div style="font-size:13px;color:oklch(60% 0.01 250);">—</div>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="background:white;border:1px solid oklch(90% 0.01 250);border-radius:12px;padding:16px;">
+          <div style="font-size:11px;font-weight:700;color:oklch(50% 0.02 250);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Existing Item</div>
+          <sc-if value="{{ entry.hasExisting }}">
+            <div style="font-size:12px;color:oklch(50% 0.02 250);font-family:monospace;margin-bottom:2px;">{{ entry.existingItemCode }}</div>
+            <div style="font-size:15px;font-weight:700;text-decoration:line-through;color:oklch(45% 0.02 250);">{{ entry.existingItemName }}</div>
+          </sc-if>
+          <sc-if value="{{ entry.noExisting }}">
+            <div style="font-size:13px;color:oklch(60% 0.01 250);">—</div>
+          </sc-if>
+        </div>
+        <div style="background:white;border:1px solid oklch(90% 0.01 250);border-radius:12px;padding:16px;">
+          <div style="font-size:11px;font-weight:700;color:oklch(50% 0.02 250);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">New Item</div>
+          <div style="font-size:12px;color:oklch(50% 0.02 250);font-family:monospace;margin-bottom:2px;">{{ entry.itemCodeDisplay }}</div>
+          <div style="font-size:15px;font-weight:700;">{{ entry.itemName }}</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11px;font-weight:700;color:oklch(50% 0.02 250);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Progress</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="flex:1;height:8px;border-radius:999px;background:oklch(93% 0.005 250);overflow:hidden;">
+            <div style="height:100%;border-radius:999px;width:{{ entry.progressPct }}%;background:{{ entry.progressColor }};"></div>
+          </div>
+          <span style="font-size:12.5px;font-weight:700;color:oklch(40% 0.02 250);">{{ entry.progressPct }}%</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="max-width:900px;margin:0 auto;padding:0 24px 32px;">
+    <div style="background:white;border:1px solid oklch(90% 0.01 250);border-radius:12px;padding:16px;">
+      <div style="font-size:11px;font-weight:700;color:oklch(50% 0.02 250);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Remark</div>
+      <textarea placeholder="Add a remark for the schematic team…" value="{{ remark }}" onChange="{{ onRemarkChange }}" rows="3" style="width:100%;padding:10px 12px;border-radius:9px;border:1px solid oklch(85% 0.01 250);font-size:14px;resize:vertical;"></textarea>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1000,&quot;height&quot;:700},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#0F766E&quot;,&quot;options&quot;:[&quot;#2456C9&quot;,&quot;#0F766E&quot;,&quot;#4338CA&quot;,&quot;#0E7490&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  static BRANCHES = ['BTRD','BTB','BTK','BTP','BTRP','BTR','BTN','BTY','BTH','BTRY','BTKR','BTCM','BTSR','BTUD'];
+
+  static STATUS_META = {
+    pending:     { label: 'Pending',     bg: 'oklch(93% 0.04 230)', fg: 'oklch(45% 0.15 230)', progress: 20,  color: 'oklch(58% 0.19 25)' },
+    in_progress: { label: 'In Progress', bg: 'oklch(92% 0.05 250)', fg: 'oklch(40% 0.13 250)', progress: 60,  color: 'oklch(75% 0.16 90)' },
+    done:        { label: 'Done',        bg: 'oklch(92% 0.06 150)', fg: 'oklch(38% 0.1 150)',  progress: 100, color: 'oklch(70% 0.15 150)' }
+  };
+
+  static sampleSeed() {
+    const s = (branch, location, itemCode, itemName, status, date, notes, existingItemName, existingItemCode) => ({ branch, location, itemCode, itemName, status, date, notes: notes || '', existingItemName: existingItemName || '', existingItemCode: existingItemCode || '' });
+    return [
+      s('BTRD', 'Front window', 'DSP-101', 'Summer promo poster', 'pending', '2026-06-02', 'Old poster faded, needs reprint', 'Spring promo poster', 'DSP-088'),
+      s('BTRD', 'Checkout counter', 'DSP-102', 'Loyalty card display', 'in_progress', '2026-05-14'),
+      s('BTB', 'Shelf 3, aisle 2', 'DSP-103', 'New snack packaging', 'pending', '2026-06-20', 'Supplier switched box size', 'Old snack packaging', 'DSP-071'),
+      s('BTK', 'Entrance table', 'DSP-104', 'Seasonal bundle sign', 'done', '2025-12-05'),
+      s('BTP', 'Front window', 'DSP-105', 'Holiday banner', 'pending', '2025-12-18'),
+      s('BTRP', 'Shelf 1', 'DSP-106', 'Price tag set', 'in_progress', '2026-04-09', 'Waiting on new price list'),
+      s('BTR', 'Checkout counter', 'DSP-107', 'Impulse item rack card', 'done', '2026-01-22'),
+      s('BTN', 'Front window', 'DSP-108', 'New collection poster', 'pending', '2026-06-11', 'Glass has old tape residue', 'Faded collection poster', 'DSP-060'),
+      s('BTY', 'Shelf 2, aisle 1', 'DSP-109', 'Product info card', 'pending', '2026-05-30'),
+      s('BTH', 'Entrance table', 'DSP-110', 'Welcome sign', 'in_progress', '2026-03-15'),
+      s('BTRY', 'Front window', 'DSP-111', 'Discount sticker set', 'done', '2026-02-08'),
+      s('BTKR', 'Checkout counter', 'DSP-112', 'New payment method sign', 'pending', '2026-07-01', 'Needs QR code updated', 'Old payment sign', 'DSP-050'),
+      s('BTCM', 'Shelf 4', 'DSP-113', 'Refill stock label', 'in_progress', '2026-04-25'),
+      s('BTSR', 'Front window', 'DSP-114', 'Brand refresh poster', 'pending', '2026-06-27'),
+      s('BTUD', 'Entrance table', 'DSP-115', 'New arrivals sign', 'done', '2025-11-19')
+    ].map((e, i) => ({ id: 'e' + (i + 1), photoId: 'photo-e' + (i + 1), ...e }));
+  }
+
+  state = { entries: Component.sampleSeed(), remark: '' };
+
+  renderVals() {
+    const accentColor = this.props.accentColor ?? '#2456C9';
+    const params = new URLSearchParams(window.location.search);
+    const entryId = params.get('entry');
+    const branchParam = params.get('branch');
+    const entryRaw = this.state.entries.find(e => e.id === entryId);
+    const activeBranch = (entryRaw && entryRaw.branch) || (branchParam && Component.BRANCHES.includes(branchParam) ? branchParam : Component.BRANCHES[0]);
+    const backHref = 'Product List.dc.html?branch=' + activeBranch;
+
+    if (!entryRaw) {
+      return { accentColor, accentColorHover: accentColor, activeBranch, backHref, notFound: true, found: false };
+    }
+
+    const meta = Component.STATUS_META[entryRaw.status];
+    const entry = {
+      ...entryRaw,
+      statusLabel: meta.label, statusBg: meta.bg, statusFg: meta.fg,
+      progressPct: meta.progress, progressColor: meta.color,
+      hasExisting: !!entryRaw.existingItemName,
+      noExisting: !entryRaw.existingItemName,
+      hasNotes: !!entryRaw.notes,
+      noNotes: !entryRaw.notes,
+      itemCodeDisplay: entryRaw.itemCode || '—'
+    };
+
+    return {
+      accentColor,
+      accentColorHover: accentColor,
+      activeBranch,
+      backHref,
+      notFound: false,
+      found: true,
+      entry,
+      remark: this.state.remark,
+      onRemarkChange: (ev) => this.setState({ remark: ev.target.value })
+    };
+  }
+}
+
+</script>
+</body>
+</html>

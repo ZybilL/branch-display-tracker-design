@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; }
+    input, select, button { font-family: inherit; }
+    ::placeholder { color: oklch(60% 0.01 250); }
+  </style>
+</helmet>
+<x-import component-from-global-scope="image-slot" from="./image-slot.js" hint-size="1,1" style="width:1px;height:1px;overflow:hidden;position:absolute;opacity:0;pointer-events:none;"></x-import>
+
+<div style="min-height:100vh;background:oklch(97% 0.004 250);color:oklch(22% 0.02 250);display:flex;">
+
+  <!-- Sidebar -->
+  <div style="width:230px;flex-shrink:0;background:white;border-right:1px solid oklch(90% 0.01 250);display:flex;flex-direction:column;padding:18px 14px;">
+    <div style="display:flex;align-items:center;gap:9px;padding:4px 8px 18px;">
+      <div style="width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,#0F766E,#2456C9);flex-shrink:0;"></div>
+      <span style="font-size:16px;font-weight:800;letter-spacing:-0.01em;">Product Display</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:18px;">
+      <a href="Product List.dc.html" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:oklch(35% 0.02 250);font-size:13.5px;font-weight:600;text-decoration:none;">
+        <span>▤</span> All Items
+      </a>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;border-radius:8px;background:oklch(94% 0.03 165);color:#0F766E;font-size:13.5px;font-weight:700;">
+        <span style="display:flex;align-items:center;gap:10px;">✓ Design Approval</span>
+        <span style="background:#0F766E;color:white;font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 7px;">{{ totalNeedsReview }}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:oklch(35% 0.02 250);font-size:13.5px;font-weight:600;">
+        <span>☰</span> My Items
+      </div>
+    </div>
+
+    <div style="font-size:10.5px;font-weight:700;color:oklch(55% 0.02 250);text-transform:uppercase;letter-spacing:0.05em;padding:0 10px 8px;">Branches</div>
+    <div style="display:flex;flex-direction:column;gap:1px;margin-bottom:18px;max-height:220px;overflow:auto;">
+      <sc-for list="{{ branchNav }}" as="bn" hint-placeholder-count="14">
+        <div onClick="{{ bn.onClick }}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:7px;font-size:13px;background:{{ bn.bg }};color:{{ bn.fg }};font-weight:{{ bn.weight }};cursor:pointer;">
+          <span>{{ bn.name }}</span>
+          <span style="font-size:11px;color:oklch(55% 0.02 250);">{{ bn.count }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="font-size:10.5px;font-weight:700;color:oklch(55% 0.02 250);text-transform:uppercase;letter-spacing:0.05em;padding:0 10px 8px;">Reports</div>
+    <div style="display:flex;flex-direction:column;gap:1px;">
+      <a href="Branch Summary.dc.html" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;font-size:13px;color:oklch(35% 0.02 250);text-decoration:none;">📊 Summary</a>
+      <a href="Display Report.dc.html" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;font-size:13px;color:oklch(35% 0.02 250);text-decoration:none;">🖨 Job Report</a>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
+    <!-- Top bar -->
+    <div style="height:60px;flex-shrink:0;background:white;border-bottom:1px solid oklch(90% 0.01 250);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px;">
+      <a href="Landing Page.dc.html" style="font-size:13px;font-weight:600;color:oklch(45% 0.02 250);text-decoration:none;display:flex;align-items:center;gap:6px;flex-shrink:0;">← Branches</a>
+      <div style="position:relative;width:320px;">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:oklch(55% 0.02 250);font-size:14px;">🔎</span>
+        <input type="text" placeholder="Search item, location…" value="{{ searchQuery }}" onChange="{{ onSearchChange }}" style="width:100%;padding:9px 12px 9px 34px;border-radius:9px;border:1px solid oklch(88% 0.01 250);font-size:13.5px;background:oklch(97% 0.005 250);">
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span style="font-size:16px;">🔔</span>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;">
+          <div style="width:30px;height:30px;border-radius:50%;background:oklch(90% 0.01 250);"></div>
+          Designer
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:22px 24px;flex:1;overflow:auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px;flex-wrap:wrap;row-gap:10px;">
+        <div style="font-size:17px;font-weight:800;">{{ pageTitle }} <span style="font-weight:500;color:oklch(45% 0.02 250);font-size:13px;">— {{ totalEntries }} total</span></div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;row-gap:10px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;row-gap:6px;">
+            <sc-for list="{{ approvalFilters }}" as="af" hint-placeholder-count="4">
+              <button onClick="{{ af.onClick }}" style="padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid {{ af.border }};cursor:pointer;background:{{ af.bg }};color:{{ af.fg }};white-space:nowrap;">{{ af.label }} <span style="opacity:0.65;">{{ af.count }}</span></button>
+            </sc-for>
+          </div>
+          <button onClick="{{ submitDecisions }}" disabled="{{ noPendingChanges }}" style="padding:9px 16px;border-radius:9px;border:none;background:{{ submitBg }};color:white;font-size:13px;font-weight:700;cursor:{{ submitCursor }};white-space:nowrap;">✓ Submit Decisions{{ pendingCountLabel }}</button>
+        </div>
+      </div>
+      <sc-if value="{{ justSubmitted }}">
+        <div style="font-size:12.5px;font-weight:600;color:oklch(45% 0.13 155);margin-bottom:10px;">Decisions submitted — Display Report updated.</div>
+      </sc-if>
+      <div style="font-size:13px;color:oklch(50% 0.02 250);margin-bottom:16px;">Review each submitted replacement, choose Approve or Reject, then submit to send decisions to the schematic team's report.</div>
+
+      <div style="background:white;border:1px solid oklch(90% 0.01 250);border-radius:12px;overflow-x:auto;">
+        <table style="width:100%;min-width:920px;border-collapse:collapse;">
+          <thead>
+            <tr style="border-bottom:1px solid oklch(90% 0.01 250);">
+              <th style="text-align:left;padding:11px 16px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;width:96px;">Photo</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;">Location</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;width:10%;">Existing Code</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;">Existing<br>Product Name</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;width:10%;">New<br>Code</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;">New<br>Product Name</th>
+              <th style="text-align:left;padding:11px 12px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;">Approval</th>
+              <th style="text-align:left;padding:11px 16px;font-size:11.5px;font-weight:700;color:oklch(45% 0.02 250);text-transform:uppercase;letter-spacing:0.03em;width:200px;">Decision</th>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ pageRows }}" as="row" hint-placeholder-count="10">
+              <tr style="border-bottom:1px solid oklch(94% 0.005 250);">
+                <td style="padding:8px 16px;">
+                  <div style="width:64px;height:64px;border-radius:8px;overflow:hidden;">
+                    <image-slot id="{{ row.photoId }}" shape="rect" placeholder="Photo" fit="cover" style="width:100%;height:100%;"></image-slot>
+                  </div>
+                </td>
+                <td style="padding:10px 12px;font-size:13px;color:oklch(40% 0.02 250);">{{ row.location }}</td>
+                <td style="padding:10px 12px;font-size:12px;color:oklch(50% 0.02 250);font-family:monospace;">{{ row.existingItemCodeDisplay }}</td>
+                <td style="padding:10px 12px;font-size:12.5px;color:oklch(45% 0.02 250);">{{ row.existingItemNameDisplay }}</td>
+                <td style="padding:10px 12px;font-size:12px;color:oklch(45% 0.02 250);font-family:monospace;">{{ row.itemCodeDisplay }}</td>
+                <td style="padding:10px 12px;font-size:13px;font-weight:600;">{{ row.itemName }}</td>
+                <td style="padding:10px 12px;">
+                  <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:{{ row.approvalBg }};color:{{ row.approvalFg }};white-space:nowrap;">{{ row.approvalLabel }}</span>
+                  <sc-if value="{{ row.isDirty }}">
+                    <div style="font-size:10.5px;color:oklch(55% 0.02 250);margin-top:3px;">Not yet submitted</div>
+                  </sc-if>
+                </td>
+                <td style="padding:10px 16px;">
+                  <div style="display:flex;gap:8px;">
+                    <button onClick="{{ row.onApprove }}" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid {{ row.approveBorder }};background:{{ row.approveBg }};color:{{ row.approveFg }};font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">✓ Approve</button>
+                    <button onClick="{{ row.onReject }}" style="flex:1;padding:7px 10px;border-radius:7px;border:1px solid {{ row.rejectBorder }};background:{{ row.rejectBg }};color:{{ row.rejectFg }};font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">✕ Reject</button>
+                  </div>
+                </td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid oklch(92% 0.005 250);">
+          <span style="font-size:12.5px;color:oklch(45% 0.02 250);">{{ pageLabel }}</span>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button onClick="{{ prevPage }}" style="width:28px;height:28px;border-radius:7px;border:1px solid oklch(88% 0.01 250);background:white;cursor:pointer;font-size:12px;">‹</button>
+            <sc-for list="{{ pageNumbers }}" as="pn" hint-placeholder-count="3">
+              <button onClick="{{ pn.onClick }}" style="width:28px;height:28px;border-radius:7px;border:1px solid {{ pn.border }};background:{{ pn.bg }};color:{{ pn.fg }};cursor:pointer;font-size:12.5px;font-weight:600;">{{ pn.label }}</button>
+            </sc-for>
+            <button onClick="{{ nextPage }}" style="width:28px;height:28px;border-radius:7px;border:1px solid oklch(88% 0.01 250);background:white;cursor:pointer;font-size:12px;">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  static BRANCHES = ['BTRD','BTB','BTK','BTP','BTRP','BTR','BTN','BTY','BTH','BTRY','BTKR','BTCM','BTSR','BTUD'];
+
+  static APPROVAL_META = {
+    needs_review: { label: 'Needs Review', bg: 'oklch(93% 0.04 230)', fg: 'oklch(45% 0.15 230)' },
+    approved:     { label: 'Approved',     bg: 'oklch(92% 0.06 150)', fg: 'oklch(38% 0.1 150)' },
+    rejected:     { label: 'Rejected',     bg: 'oklch(93% 0.06 25)',  fg: 'oklch(45% 0.15 25)' }
+  };
+
+  static STORAGE_KEY = 'productDisplayApprovals';
+
+  static sampleSeed() {
+    const s = (branch, location, itemCode, itemName, approval, existingItemName, existingItemCode) => ({ branch, location, itemCode, itemName, approval, existingItemName: existingItemName || '', existingItemCode: existingItemCode || '' });
+    return [
+      s('BTRD', 'Front window', 'DSP-101', 'Summer promo poster', 'needs_review', 'Spring promo poster', 'DSP-088'),
+      s('BTRD', 'Checkout counter', 'DSP-102', 'Loyalty card display', 'approved'),
+      s('BTB', 'Shelf 3, aisle 2', 'DSP-103', 'New snack packaging', 'needs_review', 'Old snack packaging', 'DSP-071'),
+      s('BTK', 'Entrance table', 'DSP-104', 'Seasonal bundle sign', 'approved'),
+      s('BTP', 'Front window', 'DSP-105', 'Holiday banner', 'needs_review'),
+      s('BTRP', 'Shelf 1', 'DSP-106', 'Price tag set', 'rejected'),
+      s('BTR', 'Checkout counter', 'DSP-107', 'Impulse item rack card', 'approved'),
+      s('BTN', 'Front window', 'DSP-108', 'New collection poster', 'needs_review', 'Faded collection poster', 'DSP-060'),
+      s('BTY', 'Shelf 2, aisle 1', 'DSP-109', 'Product info card', 'needs_review'),
+      s('BTH', 'Entrance table', 'DSP-110', 'Welcome sign', 'approved'),
+      s('BTRY', 'Front window', 'DSP-111', 'Discount sticker set', 'approved'),
+      s('BTKR', 'Checkout counter', 'DSP-112', 'New payment method sign', 'needs_review', 'Old payment sign', 'DSP-050'),
+      s('BTCM', 'Shelf 4', 'DSP-113', 'Refill stock label', 'rejected'),
+      s('BTSR', 'Front window', 'DSP-114', 'Brand refresh poster', 'needs_review'),
+      s('BTUD', 'Entrance table', 'DSP-115', 'New arrivals sign', 'approved')
+    ].map((e, i) => ({ id: 'e' + (i + 1), photoId: 'photo-e' + (i + 1), key: (i + 1), ...e }));
+  }
+
+  state = {
+    entries: Component.sampleSeed(),
+    submittedApproval: {},
+    activeBranch: null,
+    searchQuery: '',
+    approvalFilter: 'all',
+    page: 1,
+    rowsPerPage: 10,
+    justSubmitted: false
+  };
+
+  componentDidMount() {
+    const params = new URLSearchParams(window.location.search);
+    const b = params.get('branch');
+    if (b && Component.BRANCHES.includes(b)) {
+      this.setState({ activeBranch: b });
+    }
+    const submittedApproval = {};
+    this.state.entries.forEach(e => { submittedApproval[e.branch + '|' + e.itemCode] = e.approval; });
+    this.setState({ submittedApproval });
+  }
+
+  setApproval(id, approval) {
+    this.setState(s => ({ entries: s.entries.map(e => e.id === id ? { ...e, approval } : e) }));
+  }
+
+  submitDecisions() {
+    this.setState(s => {
+      const submittedApproval = { ...s.submittedApproval };
+      s.entries.forEach(e => { submittedApproval[e.branch + '|' + e.itemCode] = e.approval; });
+      try { localStorage.setItem(Component.STORAGE_KEY, JSON.stringify(submittedApproval)); } catch (err) {}
+      return { submittedApproval, justSubmitted: true };
+    });
+    setTimeout(() => this.setState({ justSubmitted: false }), 3000);
+  }
+
+  renderVals() {
+    const activeBranch = this.state.activeBranch || Component.BRANCHES[0];
+    const branchEntries = this.state.entries.filter(e => e.branch === activeBranch);
+    const q = this.state.searchQuery.trim().toLowerCase();
+    const matches = (e) => {
+      if (this.state.approvalFilter !== 'all' && e.approval !== this.state.approvalFilter) return false;
+      if (!q) return true;
+      return (e.location + ' ' + e.itemName).toLowerCase().includes(q);
+    };
+    const filtered = branchEntries.filter(matches);
+
+    const totalEntries = branchEntries.length;
+    const totalNeedsReviewBranch = branchEntries.filter(e => e.approval === 'needs_review').length;
+    const totalApproved = branchEntries.filter(e => e.approval === 'approved').length;
+    const totalRejected = branchEntries.filter(e => e.approval === 'rejected').length;
+    const totalNeedsReview = this.state.entries.filter(e => e.approval === 'needs_review').length;
+
+    const approvalDefs = [
+      { value: 'all', label: 'All', count: totalEntries },
+      { value: 'needs_review', label: 'Needs Review', count: totalNeedsReviewBranch },
+      { value: 'approved', label: 'Approved', count: totalApproved },
+      { value: 'rejected', label: 'Rejected', count: totalRejected }
+    ];
+    const approvalFilters = approvalDefs.map(ad => {
+      const active = this.state.approvalFilter === ad.value;
+      return {
+        ...ad,
+        onClick: () => this.setState({ approvalFilter: ad.value, page: 1 }),
+        bg: active ? '#0F766E' : 'white',
+        fg: active ? 'white' : 'oklch(35% 0.02 250)',
+        border: active ? '#0F766E' : 'oklch(88% 0.01 250)'
+      };
+    });
+
+    const branchNav = Component.BRANCHES.map(name => {
+      const active = name === activeBranch;
+      return {
+        name,
+        count: this.state.entries.filter(e => e.branch === name && e.approval === 'needs_review').length,
+        bg: active ? 'oklch(94% 0.03 165)' : 'transparent',
+        fg: active ? '#0F766E' : 'oklch(35% 0.02 250)',
+        weight: active ? '700' : '500',
+        onClick: () => {
+          this.setState({ activeBranch: name, page: 1, approvalFilter: 'all', searchQuery: '' });
+          const url = new URL(window.location.href);
+          url.searchParams.set('branch', name);
+          window.history.replaceState({}, '', url);
+        }
+      };
+    });
+
+    const rowsPerPage = this.state.rowsPerPage;
+    const totalPages = Math.max(1, Math.ceil(filtered.length / rowsPerPage));
+    const page = Math.min(this.state.page, totalPages);
+    const start = (page - 1) * rowsPerPage;
+    const pageEntries = filtered.slice(start, start + rowsPerPage);
+
+    const pendingCount = this.state.entries.filter(e => (this.state.submittedApproval[e.branch + '|' + e.itemCode] || 'needs_review') !== e.approval).length;
+
+    const pageRows = pageEntries.map(e => {
+      const meta = Component.APPROVAL_META[e.approval];
+      const isApproved = e.approval === 'approved';
+      const isRejected = e.approval === 'rejected';
+      const isDirty = (this.state.submittedApproval[e.branch + '|' + e.itemCode] || 'needs_review') !== e.approval;
+      return {
+        ...e,
+        isDirty,
+        itemCodeDisplay: e.itemCode || '—',
+        existingItemCodeDisplay: e.existingItemCode || '—',
+        existingItemNameDisplay: e.existingItemName || '—',
+        approvalLabel: meta.label,
+        approvalBg: meta.bg,
+        approvalFg: meta.fg,
+        approveBg: isApproved ? '#0F766E' : 'white',
+        approveFg: isApproved ? 'white' : 'oklch(35% 0.02 250)',
+        approveBorder: isApproved ? '#0F766E' : 'oklch(85% 0.01 250)',
+        rejectBg: isRejected ? 'oklch(50% 0.18 25)' : 'white',
+        rejectFg: isRejected ? 'white' : 'oklch(35% 0.02 250)',
+        rejectBorder: isRejected ? 'oklch(50% 0.18 25)' : 'oklch(85% 0.01 250)',
+        onApprove: () => this.setApproval(e.id, 'approved'),
+        onReject: () => this.setApproval(e.id, 'rejected')
+      };
+    });
+
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1).map(n => ({
+      label: String(n),
+      onClick: () => this.setState({ page: n }),
+      bg: n === page ? '#0F766E' : 'white',
+      fg: n === page ? 'white' : 'oklch(35% 0.02 250)',
+      border: n === page ? '#0F766E' : 'oklch(88% 0.01 250)'
+    }));
+
+    const pageLabel = filtered.length === 0
+      ? 'No items'
+      : ('Showing ' + (start + 1) + '–' + Math.min(start + rowsPerPage, filtered.length) + ' of ' + filtered.length);
+
+    return {
+      pageTitle: activeBranch,
+      searchQuery: this.state.searchQuery,
+      onSearchChange: (ev) => this.setState({ searchQuery: ev.target.value, page: 1 }),
+      totalEntries,
+      totalNeedsReview,
+      approvalFilters,
+      branchNav,
+      pageRows,
+      pageNumbers,
+      pageLabel,
+      submitDecisions: () => this.submitDecisions(),
+      noPendingChanges: pendingCount === 0,
+      submitBg: pendingCount === 0 ? 'oklch(75% 0.01 250)' : '#0F766E',
+      submitCursor: pendingCount === 0 ? 'default' : 'pointer',
+      pendingCountLabel: pendingCount > 0 ? (' (' + pendingCount + ')') : '',
+      justSubmitted: this.state.justSubmitted,
+      prevPage: () => this.setState(s => ({ page: Math.max(1, s.page - 1) })),
+      nextPage: () => this.setState(s => ({ page: Math.min(totalPages, s.page + 1) }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>
