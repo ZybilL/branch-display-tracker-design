@@ -1,7 +1,7 @@
 // ---- Config -----------------------------------------------------------
 // Paste the Web App URL you get after deploying apps-script/Code.gs
 // (Deploy > New deployment > Web app > Execute as: Me > Who has access: Anyone).
-var APPS_SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx-vwGPsXe33EMg4T_UwBOWXnZI9csr3ByI2a3vZcSL5L8hEz1owZR_Q8aLnNkLdvSEvQ/exec';
 
 var BRANCHES = ['BTRD', 'BTB', 'BTK', 'BTP', 'BTRP', 'BTR', 'BTN', 'BTY', 'BTH', 'BTRY', 'BTKR', 'BTCM', 'BTSR', 'BTUD'];
 
