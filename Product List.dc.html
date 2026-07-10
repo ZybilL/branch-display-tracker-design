@@ -93,14 +93,14 @@
             </sc-for>
           </div>
           <select value="{{ monthFilter }}" onChange="{{ onMonthChange }}" style="padding:7px 12px;border-radius:9px;border:1px solid oklch(88% 0.01 250);font-size:12.5px;font-weight:600;background:white;color:oklch(35% 0.02 250);">
-            <sc-for list="{{ monthOptions }}" as="mo" hint-placeholder-count="4">
+            <template data-for="{{ monthOptions }}" data-as="mo">
               <option value="{{ mo.value }}">{{ mo.label }}</option>
-            </sc-for>
+            </template>
           </select>
           <select value="{{ yearFilter }}" onChange="{{ onYearChange }}" style="padding:7px 12px;border-radius:9px;border:1px solid oklch(88% 0.01 250);font-size:12.5px;font-weight:600;background:white;color:oklch(35% 0.02 250);">
-            <sc-for list="{{ yearOptions }}" as="yo" hint-placeholder-count="3">
+            <template data-for="{{ yearOptions }}" data-as="yo">
               <option value="{{ yo.value }}">{{ yo.label }}</option>
-            </sc-for>
+            </template>
           </select>
           <button onClick="{{ openAdd }}" style="padding:9px 16px;border-radius:9px;border:none;background:#0F766E;color:white;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">+ Add Entry</button>
         </div>
@@ -122,7 +122,7 @@
             </tr>
           </thead>
           <tbody>
-            <sc-for list="{{ pageRows }}" as="row" hint-placeholder-count="10">
+            <template data-for="{{ pageRows }}" data-as="row">
               <tr onClick="{{ row.onView }}" style="border-bottom:1px solid oklch(94% 0.005 250);cursor:pointer;" style-hover="background:oklch(97% 0.006 250);">
                 <td style="padding:8px 16px;">
                   <div style="width:64px;height:64px;border-radius:8px;overflow:hidden;">
@@ -149,7 +149,7 @@
                   <button onClick="{{ row.onDelete }}" title="Delete" style="border:none;background:transparent;cursor:pointer;font-size:15px;color:oklch(55% 0.02 250);padding:4px;">🗑</button>
                 </td>
               </tr>
-            </sc-for>
+            </template>
           </tbody>
         </table>
 

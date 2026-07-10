@@ -97,7 +97,7 @@
         </tr>
       </thead>
       <tbody>
-        <sc-for list="{{ bg.jobs }}" as="job" hint-placeholder-count="2">
+        <template data-for="{{ bg.jobs }}" data-as="job">
           <tr>
             <td>{{ job.location }}</td>
             <td style="font-family:monospace;color:oklch(50% 0.02 250);">{{ job.existingItemCodeDisplay }}</td>
@@ -108,7 +108,7 @@
             <td>{{ job.approvalLabel }}</td>
             <td>{{ job.notesDisplay }}</td>
           </tr>
-        </sc-for>
+        </template>
       </tbody>
     </table>
   </sc-for>

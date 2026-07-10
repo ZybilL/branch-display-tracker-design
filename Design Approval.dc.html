@@ -110,7 +110,7 @@
             </tr>
           </thead>
           <tbody>
-            <sc-for list="{{ pageRows }}" as="row" hint-placeholder-count="10">
+            <template data-for="{{ pageRows }}" data-as="row">
               <tr style="border-bottom:1px solid oklch(94% 0.005 250);">
                 <td style="padding:8px 16px;">
                   <div style="width:64px;height:64px;border-radius:8px;overflow:hidden;">
@@ -135,7 +135,7 @@
                   </div>
                 </td>
               </tr>
-            </sc-for>
+            </template>
           </tbody>
         </table>
 
